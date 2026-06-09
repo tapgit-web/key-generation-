@@ -1,0 +1,21 @@
+{
+  "name": "license-server",
+  "version": "1.0.0",
+  "description": "Node.js License Activation Server",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^9.2.1"
+  },
+  "author": "",
+  "license": "ISC"
+}

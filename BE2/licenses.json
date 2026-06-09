@@ -1,0 +1,92 @@
+[
+    {
+        "key": "TEST-1234-KEY",
+        "status": "active",
+        "hwid": "USER-PC-123",
+        "activatedAt": "2026-02-22T11:15:58.111Z",
+        "licenseType": "Lifetime",
+        "brandName": "Automation People V3",
+        "expiryDate": null
+    },
+    {
+        "key": "ABCD-1234-EFGH-5678",
+        "status": "active",
+        "hwid": "DESKTOP-6RB25THT",
+        "activatedAt": "2026-05-18T05:50:12.407Z",
+        "licenseType": "Expiry",
+        "brandName": "TAP Sentinel",
+        "expiryDate": "2028-12-31T00:00:00.000Z"
+    },
+    {
+        "key": "PRO-UX-99-BATT",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Expiry",
+        "brandName": "TAP Sentinel",
+        "expiryDate": "2026-12-31T00:00:00.000Z"
+    },
+    {
+        "key": "NEW-KEY-2024",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Lifetime",
+        "brandName": "TAP Sentinel",
+        "expiryDate": null
+    },
+    {
+        "key": "NEW1-KEY-2024",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Expiry",
+        "brandName": "Automation People",
+        "expiryDate": "2027-06-30T00:00:00.000Z"
+    },
+    {
+        "key": "UB2X-Q2VE-0QJZ-3727",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Lifetime",
+        "brandName": "Automation People",
+        "expiryDate": null
+    },
+    {
+        "key": "EXP-TEST-9999",
+        "status": "active",
+        "hwid": "DESKTOP-E3Q73CHZ",
+        "activatedAt": "2026-06-03T06:30:11.906Z",
+        "licenseType": "Expiry",
+        "brandName": "TAP Sentinel",
+        "expiryDate": "2027-12-31T00:00:00.000Z"
+    },
+    {
+        "key": "11PY-YWH0-GPPC-X60K",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Lifetime",
+        "brandName": "TAP Sentinel",
+        "expiryDate": null
+    },
+    {
+        "key": "WFGA-R97G-GIHM-9NEU",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Expiry",
+        "brandName": "TAP Sentinel",
+        "expiryDate": "2026-06-02T00:00:00.000Z"
+    },
+    {
+        "key": "HHHHHHHHHHHHHHHHHHHH",
+        "status": "new",
+        "hwid": "null",
+        "activatedAt": null,
+        "licenseType": "Expiry",
+        "brandName": "TAP Sentinel",
+        "expiryDate": "2026-06-02T00:00:00.000Z"
+    }
+]
