@@ -31,15 +31,11 @@ if (config.MONGODB_URI) {
 // Routes
 app.use('/', activateRoute);
 
-// Default Landing Root Route to prevent "Cannot GET /"
-app.get('/', (req, res) => {
-    res.json({
-        server: "TAP Sentinel License Activation Server",
-        status: "active",
-        health: "/health",
-        frontend: "Please visit http://localhost:5173 to access the dashboard panel"
-    });
-});
+const path = require('path');
+
+// Serve static frontend files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Better health check to help debugging connection issues
 app.get('/health', (req, res) => {
@@ -160,6 +156,15 @@ app.post('/admin/update', authenticateAdmin, async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, msg: "Failed to update license" });
     }
+});
+
+// Catch-all route to serve the React Dashboard for any other request
+app.get('*', (req, res) => {
+    // Only serve index.html for non-API routes
+    if (req.path.startsWith('/admin') || req.path.startsWith('/activate') || req.path.startsWith('/health')) {
+        return res.status(404).json({ success: false, msg: "API Route Not Found" });
+    }
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(config.PORT, () => {
