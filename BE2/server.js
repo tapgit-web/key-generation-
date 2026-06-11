@@ -12,6 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require('path');
+// Serve static frontend files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // MongoDB Connection
 if (config.MONGODB_URI) {
     console.log('⏳ Connecting to MongoDB...');
@@ -31,10 +35,6 @@ if (config.MONGODB_URI) {
 // Routes
 app.use('/', activateRoute);
 
-const path = require('path');
-
-// Serve static frontend files from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Better health check to help debugging connection issues
@@ -158,12 +158,9 @@ app.post('/admin/update', authenticateAdmin, async (req, res) => {
     }
 });
 
-// Catch-all route to serve the React Dashboard for any other request
+// Default Landing Root Route to prevent "Cannot GET /"
+// Catch-all route to serve the React Dashboard for any unhandled paths
 app.get('*', (req, res) => {
-    // Only serve index.html for non-API routes
-    if (req.path.startsWith('/admin') || req.path.startsWith('/activate') || req.path.startsWith('/health')) {
-        return res.status(404).json({ success: false, msg: "API Route Not Found" });
-    }
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
