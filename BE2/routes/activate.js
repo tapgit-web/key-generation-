@@ -58,6 +58,10 @@ router.post('/activate', async (req, res) => {
         // Handling already active license
         if (license.status === 'active') {
             if (license.hwid === hwid) {
+                // Update user name in DB if it's currently 'null' or empty or has changed
+                if (name && (!license.name || license.name === 'null' || license.name !== name)) {
+                    await db.updateLicense(key, { name: name });
+                }
                 return res.json({
                     valid: true,
                     licenseType: license.licenseType || 'Standard',
