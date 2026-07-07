@@ -22,7 +22,7 @@ function App() {
   const [backendUrl, setBackendUrl] = useState(
     window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000'
-      : 'https://key-generation-wuh2.onrender.com'
+      : window.location.origin || 'https://key-generation-wuh2.onrender.com'
   );
   const [isOnline, setIsOnline] = useState(false);
   
@@ -54,6 +54,7 @@ function App() {
   const [editBrandName, setEditBrandName] = useState('');
   const [editLicenseType, setEditLicenseType] = useState('Lifetime');
   const [editExpiryDate, setEditExpiryDate] = useState('');
+  const [editName, setEditName] = useState('');
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
   // Health check to auto-verify backend connection
@@ -270,6 +271,7 @@ function App() {
           key: editingLicense.key,
           licenseType: editLicenseType,
           brandName: editBrandName,
+          name: editName,
           expiryDate: editLicenseType === 'Lifetime' ? null : editExpiryDate
         })
       });
@@ -616,6 +618,7 @@ function App() {
                     <tr>
                       <th>License Key</th>
                       <th>Brand Name</th>
+                      <th>User Name</th>
                       <th>Licence Type</th>
                       <th>Status</th>
                       <th>HWID Binding</th>
@@ -627,7 +630,7 @@ function App() {
                   <tbody>
                     {filteredLicenses.length === 0 ? (
                       <tr>
-                        <td colSpan="8" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
+                        <td colSpan="9" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>
                           No license records match your criteria.
                         </td>
                       </tr>
@@ -636,6 +639,7 @@ function App() {
                         <tr key={lic.key}>
                           <td className="mono-cell" style={{ color: 'white' }}>{lic.key}</td>
                           <td>{lic.brandName || '--'}</td>
+                          <td>{lic.name && lic.name !== 'null' ? lic.name : '--'}</td>
                           <td style={{ fontSize: '0.85rem', fontWeight: 500 }}>
                             {lic.licenseType || 'Lifetime'}
                           </td>
@@ -666,6 +670,7 @@ function App() {
                               onClick={() => {
                                 setEditingLicense(lic);
                                 setEditBrandName(lic.brandName || '');
+                                setEditName(lic.name || '');
                                 setEditLicenseType(lic.licenseType || 'Lifetime');
                                 setEditExpiryDate(lic.expiryDate ? lic.expiryDate.split('T')[0] : '');
                               }}
@@ -729,6 +734,18 @@ function App() {
                     value={editBrandName}
                     onChange={(e) => setEditBrandName(e.target.value)}
                     required
+                  />
+                </div>
+
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">User Name</label>
+                  <input 
+                    type="text" 
+                    className="styled-input"
+                    style={{ paddingLeft: '1rem' }}
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    placeholder="Not activated yet"
                   />
                 </div>
 

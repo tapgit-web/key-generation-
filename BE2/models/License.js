@@ -17,6 +17,10 @@ const LicenseSchema = new mongoose.Schema({
         type: String,
         default: 'null'
     },
+    name: {
+        type: String,
+        default: 'null'
+    },
     activatedAt: {
         type: Date,
         default: null

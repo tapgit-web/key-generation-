@@ -124,7 +124,7 @@ app.post('/admin/add', authenticateAdmin, async (req, res) => {
 
 // Route to update an existing license key (Secured with token auth)
 app.post('/admin/update', authenticateAdmin, async (req, res) => {
-    const { key, licenseType, brandName, expiryDate } = req.body;
+    const { key, licenseType, brandName, expiryDate, name } = req.body;
 
     if (!key) {
         return res.status(400).json({ success: false, msg: "Key is required" });
@@ -139,6 +139,7 @@ app.post('/admin/update', authenticateAdmin, async (req, res) => {
         const updates = {};
         if (licenseType !== undefined) updates.licenseType = licenseType;
         if (brandName !== undefined) updates.brandName = brandName;
+        if (name !== undefined) updates.name = name;
         
         // If licenseType is Lifetime, force expiryDate to null
         if (licenseType === 'Lifetime') {

@@ -8,7 +8,7 @@ const db = require('../utils/db');
  * @body {string} hwid - The hardware ID of the machine.
  */
 router.post('/activate', async (req, res) => {
-    const { key, hwid } = req.body;
+    const { key, hwid, name } = req.body;
 
     if (!key || !hwid) {
         return res.json({
@@ -42,6 +42,7 @@ router.post('/activate', async (req, res) => {
         if (license.status === 'new') {
             await db.updateLicense(key, {
                 hwid: hwid,
+                name: name || 'null',
                 status: 'active',
                 activatedAt: new Date()
             });
