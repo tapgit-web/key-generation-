@@ -44,7 +44,7 @@ const db = {
      * Adds a new license key to the database.
      * @param {string} key - The new license key.
      */
-    addLicense: async (key, licenseType = 'Lifetime', brandName = 'TAP Sentinel', expiryDate = null) => {
+    addLicense: async (key, licenseType = 'Lifetime', brandName = 'TAP Sentinel', expiryDate = null, name = 'null') => {
         const uKey = key.toUpperCase();
         checkConnection();
 
@@ -55,7 +55,7 @@ const db = {
             key: uKey,
             status: 'new',
             hwid: 'null',
-            name: 'null',
+            name: name && name.trim() !== '' ? name.trim() : 'null',
             licenseType,
             brandName,
             expiryDate: expiryDate ? new Date(expiryDate) : null

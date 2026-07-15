@@ -99,7 +99,7 @@ app.get('/admin/licenses', authenticateAdmin, async (req, res) => {
 
 // Route to add a new license key (Secured with token auth)
 app.post('/admin/add', authenticateAdmin, async (req, res) => {
-    const { key, licenseType, brandName, expiryDate } = req.body;
+    const { key, licenseType, brandName, expiryDate, name } = req.body;
 
     if (!key) {
         return res.status(400).json({ success: false, msg: "Key is required" });
@@ -110,7 +110,8 @@ app.post('/admin/add', authenticateAdmin, async (req, res) => {
             key.toUpperCase(),
             licenseType,
             brandName,
-            expiryDate
+            expiryDate,
+            name
         );
         if (added) {
             res.json({ success: true, msg: `License ${key} added successfully` });

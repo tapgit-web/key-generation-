@@ -40,6 +40,7 @@ function App() {
   const [newLicenseType, setNewLicenseType] = useState('Lifetime');
   const [newBrandName, setNewBrandName] = useState('TAP Sentinel');
   const [newExpiryDate, setNewExpiryDate] = useState('');
+  const [newUserName, setNewUserName] = useState('');
   
   const [isAddingLicense, setIsAddingLicense] = useState(false);
   const [newKeyInput, setNewKeyInput] = useState('');
@@ -192,7 +193,8 @@ function App() {
           key: newKeyInput.trim().toUpperCase(),
           licenseType: newLicenseType,
           brandName: newBrandName,
-          expiryDate: newLicenseType === 'Lifetime' ? null : newExpiryDate
+          expiryDate: newLicenseType === 'Lifetime' ? null : newExpiryDate,
+          name: newUserName
         })
       });
 
@@ -202,6 +204,7 @@ function App() {
         setNewLicenseType('Lifetime');
         setNewBrandName('TAP Sentinel');
         setNewExpiryDate('');
+        setNewUserName('');
         fetchAdminData();
       } else {
         alert(`Failed to create license: ${data.msg}`);
@@ -549,6 +552,20 @@ function App() {
                       value={newBrandName}
                       onChange={(e) => setNewBrandName(e.target.value)}
                       required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ margin: 0, textAlign: 'left' }}>
+                  <label className="form-label">User Name (Optional)</label>
+                  <div className="input-container">
+                    <input 
+                      type="text" 
+                      className="styled-input"
+                      style={{ paddingLeft: '1rem' }}
+                      placeholder="Pre-register username"
+                      value={newUserName}
+                      onChange={(e) => setNewUserName(e.target.value)}
                     />
                   </div>
                 </div>
