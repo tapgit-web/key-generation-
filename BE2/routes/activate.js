@@ -10,10 +10,10 @@ const db = require('../utils/db');
 router.post('/activate', async (req, res) => {
     const { key, hwid, name } = req.body;
 
-    if (!key || !hwid) {
+    if (!key || !hwid || !name || name.trim() === '') {
         return res.json({
             valid: false,
-            msg: "License key and HWID are required"
+            msg: "License key, HWID, and Username are required"
         });
     }
 
@@ -40,9 +40,19 @@ router.post('/activate', async (req, res) => {
 
         // Handing first activation (status: new)
         if (license.status === 'new') {
+            // If license already has a name set (e.g. pre-configured by admin), verify it matches
+            if (license.name && license.name !== 'null' && license.name.trim() !== '') {
+                if (license.name.trim().toLowerCase() !== name.trim().toLowerCase()) {
+                    return res.json({
+                        valid: false,
+                        msg: "Username does not match the registered user for this license key"
+                    });
+                }
+            }
+
             await db.updateLicense(key, {
                 hwid: hwid,
-                name: name || 'null',
+                name: name,
                 status: 'active',
                 activatedAt: new Date()
             });
@@ -57,11 +67,17 @@ router.post('/activate', async (req, res) => {
 
         // Handling already active license
         if (license.status === 'active') {
+            // Verify that the username matches
+            if (!license.name || license.name === 'null' || license.name.trim() === '') {
+                await db.updateLicense(key, { name: name });
+            } else if (license.name.trim().toLowerCase() !== name.trim().toLowerCase()) {
+                return res.json({
+                    valid: false,
+                    msg: "Username does not match the registered user for this license key"
+                });
+            }
+
             if (license.hwid === hwid) {
-                // Update user name in DB if it's currently 'null' or empty or has changed
-                if (name && (!license.name || license.name === 'null' || license.name !== name)) {
-                    await db.updateLicense(key, { name: name });
-                }
                 return res.json({
                     valid: true,
                     licenseType: license.licenseType || 'Standard',
