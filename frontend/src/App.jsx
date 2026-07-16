@@ -327,6 +327,31 @@ function App() {
     }
   };
 
+  const handleDeleteDirect = async (key) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete license key ${key}? This action cannot be undone.`);
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`${backendUrl}/admin/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': adminToken
+        },
+        body: JSON.stringify({ key })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        fetchAdminData();
+      } else {
+        alert(`Failed to delete license: ${data.msg}`);
+      }
+    } catch (err) {
+      alert('Server error occurred during license deletion.');
+    }
+  };
+
   // Generate dynamic random secure key to speed up testing
   const generateRandomTestKey = () => {
     const segments = [];
@@ -721,13 +746,21 @@ function App() {
                               onClick={() => {
                                 setEditingLicense(lic);
                                 setEditBrandName(lic.brandName || '');
-                                setEditName(lic.name || '');
+                                setEditName(lic.name && lic.name !== 'null' ? lic.name : '');
                                 setEditLicenseType(lic.licenseType || 'Lifetime');
                                 setEditExpiryDate(lic.expiryDate ? lic.expiryDate.split('T')[0] : '');
                               }}
                               title="Edit License"
                             >
                               <Pencil size={14} />
+                            </button>
+                            <button 
+                              className="input-btn-inline" 
+                              style={{ position: 'static', color: 'var(--rose)' }}
+                              onClick={() => handleDeleteDirect(lic.key)}
+                              title="Delete License"
+                            >
+                              <Trash2 size={14} />
                             </button>
                           </td>
                         </tr>

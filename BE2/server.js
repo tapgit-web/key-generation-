@@ -140,7 +140,9 @@ app.post('/admin/update', authenticateAdmin, async (req, res) => {
         const updates = {};
         if (licenseType !== undefined) updates.licenseType = licenseType;
         if (brandName !== undefined) updates.brandName = brandName;
-        if (name !== undefined) updates.name = name;
+        if (name !== undefined) {
+            updates.name = name && name.trim() !== '' ? name.trim() : 'null';
+        }
         
         // If licenseType is Lifetime, force expiryDate to null
         if (licenseType === 'Lifetime') {
