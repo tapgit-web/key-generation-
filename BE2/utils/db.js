@@ -70,7 +70,19 @@ const db = {
     readLicenses: async () => {
         checkConnection();
         return await License.find({});
+    },
+
+    /**
+     * Deletes an existing license.
+     * @param {string} key - The license key to delete.
+     */
+    deleteLicense: async (key) => {
+        const uKey = key.toUpperCase();
+        checkConnection();
+        const result = await License.findOneAndDelete({ key: uKey });
+        return !!result;
     }
 };
 
 module.exports = db;
+

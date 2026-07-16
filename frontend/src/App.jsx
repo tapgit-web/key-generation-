@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   ShieldAlert,
   Search,
-  Pencil
+  Pencil,
+  Trash2
 } from 'lucide-react';
 import './App.css';
 
@@ -57,6 +58,7 @@ function App() {
   const [editExpiryDate, setEditExpiryDate] = useState('');
   const [editName, setEditName] = useState('');
   const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [isDeletingLicense, setIsDeletingLicense] = useState(false);
 
   // Health check to auto-verify backend connection
   const checkHealth = async (urlToCheck = backendUrl) => {
@@ -290,6 +292,38 @@ function App() {
       alert('Server error occurred during license update.');
     } finally {
       setIsSavingEdit(false);
+    }
+  };
+
+  const handleDeleteLicense = async () => {
+    if (!editingLicense) return;
+    const confirmDelete = window.confirm(`Are you sure you want to delete license key ${editingLicense.key}? This action cannot be undone.`);
+    if (!confirmDelete) return;
+
+    setIsDeletingLicense(true);
+    try {
+      const res = await fetch(`${backendUrl}/admin/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': adminToken
+        },
+        body: JSON.stringify({
+          key: editingLicense.key
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setEditingLicense(null);
+        fetchAdminData();
+      } else {
+        alert(`Failed to delete license: ${data.msg}`);
+      }
+    } catch (err) {
+      alert('Server error occurred during license deletion.');
+    } finally {
+      setIsDeletingLicense(false);
     }
   };
 
@@ -801,23 +835,57 @@ function App() {
                   />
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button 
+                      type="button" 
+                      className="btn-secondary" 
+                      style={{ flex: 1, padding: '0.75rem' }} 
+                      onClick={() => setEditingLicense(null)}
+                      disabled={isSavingEdit || isDeletingLicense}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn-primary" 
+                      style={{ flex: 1, padding: '0.75rem' }}
+                      disabled={isSavingEdit || isDeletingLicense}
+                    >
+                      {isSavingEdit ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  </div>
                   <button 
                     type="button" 
-                    className="btn-secondary" 
-                    style={{ flex: 1, padding: '0.75rem' }} 
-                    onClick={() => setEditingLicense(null)}
-                    disabled={isSavingEdit}
+                    className="btn-danger" 
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem', 
+                      background: 'linear-gradient(135deg, var(--rose), #e11d48)',
+                      border: 'none',
+                      color: 'white',
+                      borderRadius: 'var(--border-radius-md)',
+                      fontSize: '0.9rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      boxShadow: '0 4px 15px rgba(244, 63, 94, 0.3)',
+                      transition: 'all var(--transition-normal)'
+                    }}
+                    onClick={handleDeleteLicense}
+                    disabled={isSavingEdit || isDeletingLicense}
                   >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit" 
-                    className="btn-primary" 
-                    style={{ flex: 1, padding: '0.75rem' }}
-                    disabled={isSavingEdit}
-                  >
-                    {isSavingEdit ? 'Saving...' : 'Save Changes'}
+                    {isDeletingLicense ? (
+                      'Deleting...'
+                    ) : (
+                      <>
+                        <Trash2 size={16} />
+                        Delete Key
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

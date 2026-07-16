@@ -160,6 +160,26 @@ app.post('/admin/update', authenticateAdmin, async (req, res) => {
     }
 });
 
+// Route to delete an existing license key (Secured with token auth)
+app.post('/admin/delete', authenticateAdmin, async (req, res) => {
+    const { key } = req.body;
+
+    if (!key) {
+        return res.status(400).json({ success: false, msg: "Key is required" });
+    }
+
+    try {
+        const deleted = await dbUtility.deleteLicense(key);
+        if (deleted) {
+            res.json({ success: true, msg: `License ${key} deleted successfully` });
+        } else {
+            res.status(404).json({ success: false, msg: "License not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, msg: "Failed to delete license" });
+    }
+});
+
 // Default Landing Root Route to prevent "Cannot GET /"
 // Catch-all route to serve the React Dashboard for any unhandled paths
 app.get('*', (req, res) => {
